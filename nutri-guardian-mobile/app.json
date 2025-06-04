@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "nutri-guardian-mobile",
+    "slug": "nutri-guardian-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/IMG_4837.png",
+    "scheme": "nutriguardianmobile",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+
+    "splash": {
+      "image": "./assets/images/IMG_4837.png",
+      "resizeMode": "cover", 
+      "backgroundColor": "#ffffff" 
+    },
+
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/IMG_4837.png"
+        
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
