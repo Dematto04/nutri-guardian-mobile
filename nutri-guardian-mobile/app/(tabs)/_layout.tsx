@@ -24,7 +24,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="education/index"
+        name="education"
         options={{
           title: "Education",
           tabBarLabel: "Education",
