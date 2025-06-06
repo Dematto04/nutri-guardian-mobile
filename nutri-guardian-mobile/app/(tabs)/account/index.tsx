@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   profileCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: 16,
+    margin: 30,
     marginBottom: 8,
   },
   avatar: {
