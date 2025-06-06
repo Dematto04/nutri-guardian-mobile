@@ -17,10 +17,11 @@ function ExploreLayout() {
       />
       <Stack.Screen
         name="category/[id]"
-        options={({ route }) => ({
-          // title: route.params?.category
-          //     ? `Category: ${route.params.category}`
-          //     : "Category"
+        options={({ route }: any) => ({
+          title: route.params?.category
+            ? `${route.params.category}`
+            : "Category",
+          headerTitleAlign: "center",
         })}
       />
     </Stack>
