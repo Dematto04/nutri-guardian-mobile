@@ -15,15 +15,13 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      initialRouteName="education/index"
+      initialRouteName="explore"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
-        
       }}
-     
     >
       <Tabs.Screen
         name="education/index"
@@ -35,7 +33,7 @@ export default function TabLayout() {
           ),
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
@@ -45,16 +43,7 @@ export default function TabLayout() {
           ),
         }}
       />
-        <Tabs.Screen
-        name="favourite"
-        options={{
-          title: "Favourite",
-          tabBarLabel: "Favourite",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="heart.fill" color={color} />
-          ),
-        }}
-      />
+
       <Tabs.Screen
         name="tracking/index"
         options={{
@@ -69,9 +58,19 @@ export default function TabLayout() {
           ),
         }}
       />
-    
       <Tabs.Screen
-        name="account/index"
+        name="favourite"
+        options={{
+          title: "Favourite",
+          tabBarLabel: "Favourite",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="heart.fill" color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="account"
         options={{
           title: "Account",
           tabBarLabel: "Account",
@@ -80,7 +79,6 @@ export default function TabLayout() {
           ),
         }}
       />
-     
     </Tabs>
   );
 }

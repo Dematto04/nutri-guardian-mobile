@@ -14,7 +14,9 @@ function FavouriteLayout() {
         <Stack.Screen
             name='index'
             options={{
-                title: "Find products"
+                title: "My Favourites",
+                headerTitleAlign: "center"
+
             }}
         />
         <Stack.Screen
