@@ -3,53 +3,49 @@ import { ThemedInput } from "@/components/ThemedInput";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
-import axios from "axios";
+import { AuthService } from "@/service/auth.service";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-
+import Toast from "react-native-toast-message";
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // console.log(process.env.EXPO_PUBLIC_API_URL);
-
-  // const handleLogin = () => {
-  //   console.log("123");
-
-  //   fetch("https://localhost:7087/api/authentication/login", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ email, password }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((res) => {
-  //       console.log({ res });
-  //     })
-  //     .catch((error) => {
-  //       console.log("Login error:", error);
-  //     });
-  // };
   const handleLogin = async () => {
+    if(!email || !password){
+      Toast.show({
+        type: "error",
+        text1: "Đăng nhập thất bại",
+        text2: "Vui lòng nhập email và mật khẩu",
+        swipeable: true,
+      });
+      return
+    }
     try {
-      // const res = await AuthService.login({ email, password });
-      const res = await axios.post("http://10.0.2.2:7087/api/authentication/login", {email, password})
-      console.log("123");
-      
-      // const res = await fetch("http://192.168.1.6:7087/api/authentication/login", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ email, password }),
-      // })
-      //   .then((res) => res.json())
-      //   .then((res) => {
-      //     console.log({ res });
-      //   });
+      const res = await AuthService.login({ email, password });
+
+      if (res.status === 200) {
+        const account = res.data.data
+        Toast.show({
+          type: "success",
+          text1: "Đăng nhập thất thành công",
+          text2: `Xin chào ${account.fullName} 😊`,
+        });
+        await AsyncStorage.setItem("accessToken", account.token)
+        await AsyncStorage.setItem("refreshToken", account.refreshToken)
+        await AsyncStorage.setItem("user", JSON.stringify(account))
+        router.replace("/(tabs)/education");
+      }
     } catch (error) {
       console.log({ error });
+      Toast.show({
+        type: "error",
+        text1: "Đăng nhập thất bại",
+        text2: "Sai tài khoản hoặc mật khẩu",
+        swipeable: true,
+      });
     }
-    // router.replace("/(tabs)/education");
   };
 
   return (

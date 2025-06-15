@@ -4,6 +4,7 @@ import React from "react";
 import { Pressable } from "react-native";
 function AccountStack() {
   const router = useRouter();
+  
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
