@@ -1,20 +1,23 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Divider } from "@/components/ui/divider";
 import { Colors } from "@/constants/Colors";
 import { AuthService } from "@/service/auth.service";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    ActivityIndicator,
-    Clipboard,
-    Keyboard,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Clipboard,
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 const OTP_LENGTH = 6;
 
@@ -49,7 +52,7 @@ export default function OTPScreen() {
   };
 
   const handleKeyPress = (e: any, index: number) => {
-    if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
+    if (e.nativeEvent.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
@@ -57,39 +60,62 @@ export default function OTPScreen() {
   const handlePaste = async () => {
     try {
       const text = await Clipboard.getString();
-      const numbers = text.replace(/[^0-9]/g, '').split('').slice(0, OTP_LENGTH);
+      const numbers = text
+        .replace(/[^0-9]/g, "")
+        .split("")
+        .slice(0, OTP_LENGTH);
       if (numbers.length === OTP_LENGTH) {
         setOtp(numbers);
         setError(null);
         Keyboard.dismiss();
       }
     } catch (error) {
-      console.log('Paste failed:', error);
+      console.log("Paste failed:", error);
     }
   };
 
   const handleVerify = async () => {
-    const otpString = otp.join('');
+    const otpString = otp.join("");
     if (otpString.length !== OTP_LENGTH) {
-      setError('Vui lòng nhập đầy đủ mã OTP');
+      setError("Vui lòng nhập đầy đủ mã OTP");
       return;
     }
 
     try {
       setLoading(true);
       setError(null);
-      const response = await AuthService.verifyOTP({
-        email,
-        otp: otpString
-      });
+      const userRegister = await AsyncStorage.getItem("userRegister");
+      if (userRegister) {
+        const userParsed = JSON.parse(userRegister);
+        console.log({
+          userParsed,
+          otpString,
+        });
 
-      if (response.data) {
-        router.replace("/(auth)/login");
+        const response = await AuthService.verifyOTP({
+          userId: userParsed.userId,
+          code: otpString,
+          type: 1,
+        });
+        console.log({
+          response,
+        });
+
+        if (response.data) {
+          await AsyncStorage.removeItem("userRegister");
+          Toast.show({
+            text1: "Đăng kí thành công",
+            text2: "Vui lòng đăng nhập",
+          });
+        }
       }
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Mã OTP không hợp lệ');
+      console.log({ error });
+
+      setError(error.response?.data?.message || "Mã OTP không hợp lệ");
     } finally {
       setLoading(false);
+      router.replace("/(auth)/login");
     }
   };
 
@@ -104,7 +130,7 @@ export default function OTPScreen() {
       setCanResend(false);
       setOtp(Array(OTP_LENGTH).fill(""));
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Không thể gửi lại mã OTP');
+      setError(error.response?.data?.message || "Không thể gửi lại mã OTP");
     } finally {
       setLoading(false);
     }
@@ -112,7 +138,7 @@ export default function OTPScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
@@ -120,39 +146,42 @@ export default function OTPScreen() {
           <ThemedText type="subtitle" style={styles.title}>
             Xác thực Email
           </ThemedText>
-          
+          <Divider className="my-2  bg-indigo-500" />
+
           <Text style={styles.description}>
             Chúng tôi đã gửi mã xác thực đến email {email}
           </Text>
-
           <View style={styles.otpContainer}>
-            {Array(OTP_LENGTH).fill(0).map((_, index) => (
-              <TextInput
-                key={index}
-                ref={(ref) => {
-                  inputRefs.current[index] = ref;
-                }}
-                style={[
-                  styles.otpInput,
-                  error && styles.otpInputError,
-                  otp[index] && styles.otpInputFilled
-                ]}
-                maxLength={1}
-                keyboardType="number-pad"
-                value={otp[index]}
-                onChangeText={(text) => handleOtpChange(text, index)}
-                onKeyPress={(e) => handleKeyPress(e, index)}
-                selectTextOnFocus
-              />
-            ))}
+            {Array(OTP_LENGTH)
+              .fill(0)
+              .map((_, index) => (
+                <TextInput
+                  key={index}
+                  ref={(ref) => {
+                    inputRefs.current[index] = ref;
+                  }}
+                  style={[
+                    styles.otpInput,
+                    error && styles.otpInputError,
+                    otp[index] && styles.otpInputFilled,
+                  ]}
+                  maxLength={1}
+                  keyboardType="number-pad"
+                  value={otp[index]}
+                  onChangeText={(text) => handleOtpChange(text, index)}
+                  onKeyPress={(e) => handleKeyPress(e, index)}
+                  selectTextOnFocus
+                />
+              ))}
           </View>
 
-          {error && (
-            <Text style={styles.errorText}>{error}</Text>
-          )}
+          {error && <Text style={styles.errorText}>{error}</Text>}
 
           <TouchableOpacity
-            style={[styles.verifyButton, loading && styles.verifyButtonDisabled]}
+            style={[
+              styles.verifyButton,
+              loading && styles.verifyButtonDisabled,
+            ]}
             onPress={handleVerify}
             disabled={loading}
           >
@@ -163,22 +192,16 @@ export default function OTPScreen() {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.pasteButton}
-            onPress={handlePaste}
-          >
+          <TouchableOpacity style={styles.pasteButton} onPress={handlePaste}>
             <Text style={styles.pasteButtonText}>Dán mã</Text>
           </TouchableOpacity>
 
           <View style={styles.resendContainer}>
             <Text style={styles.resendText}>
-              {canResend ? 'Chưa nhận được mã?' : `Gửi lại mã sau ${timeLeft}s`}
+              {canResend ? "Chưa nhận được mã?" : `Gửi lại mã sau ${timeLeft}s`}
             </Text>
             {canResend && (
-              <TouchableOpacity
-                onPress={handleResendOTP}
-                disabled={loading}
-              >
+              <TouchableOpacity onPress={handleResendOTP} disabled={loading}>
                 <Text style={styles.resendButton}>Gửi lại</Text>
               </TouchableOpacity>
             )}
@@ -195,26 +218,26 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   content: {
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
     marginBottom: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   description: {
     fontSize: 16,
     color: Colors.text.secondary,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 32,
   },
   otpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     gap: 8,
     marginBottom: 24,
   },
@@ -225,30 +248,30 @@ const styles = StyleSheet.create({
     borderColor: Colors.input.background,
     borderRadius: 8,
     backgroundColor: Colors.input.background,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   otpInputFilled: {
     borderColor: Colors.primary,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   otpInputError: {
-    borderColor: '#ff6b6b',
+    borderColor: "#ff6b6b",
   },
   errorText: {
-    color: '#ff6b6b',
+    color: "#ff6b6b",
     fontSize: 14,
     marginBottom: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   verifyButton: {
     backgroundColor: Colors.button.primary,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 10,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
     marginBottom: 16,
   },
   verifyButtonDisabled: {
@@ -257,7 +280,7 @@ const styles = StyleSheet.create({
   verifyButtonText: {
     color: Colors.button.text,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   pasteButton: {
     padding: 8,
@@ -267,8 +290,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   resendContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
     marginTop: 16,
   },
@@ -279,6 +302,6 @@ const styles = StyleSheet.create({
   resendButton: {
     color: Colors.primary,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

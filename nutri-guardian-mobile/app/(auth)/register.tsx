@@ -2,6 +2,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { AuthService } from "@/service/auth.service";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { router } from "expo-router";
@@ -72,13 +73,26 @@ export default function RegisterScreen() {
         dateOfBirth: dateOfBirth.toISOString(),
         gender
       });
+      console.log({
+        fullName,
+        email,
+        password,
+        confirmPassword,
+        dateOfBirth: dateOfBirth.toISOString(),
+        gender
+      });
+      
 
       if (response.data) {
-        router.replace("/(auth)/login");
+        console.log(response);
+        await AsyncStorage.setItem('userRegister', JSON.stringify(response.data.data))
+        router.push("/(auth)/otp");
       }
     } catch (error: any) {
+      console.log({error});
+      
       setErrors({
-        email: error.response?.data?.message || "Đã xảy ra lỗi trong quá trình đăng ký"
+        email: error.response?.data?.messages.Email || "Đã xảy ra lỗi trong quá trình đăng ký"
       });
     } finally {
       setLoading(false);
@@ -98,6 +112,7 @@ export default function RegisterScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      
       <ScrollView style={styles.formContainer}>
         <ThemedText type="subtitle" style={styles.title}>Tạo Tài Khoản</ThemedText>
         

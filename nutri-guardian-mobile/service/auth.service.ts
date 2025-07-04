@@ -1,15 +1,8 @@
 import api from "@/config/api";
-import { RegisterRequestDto } from "@/dtos/auth/auth.request.dto";
+import { RegisterRequestDto, ResendOTPRequest, VerifyOTPRequest } from "@/dtos/auth/auth.request.dto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-interface VerifyOTPRequest {
-    email: string;
-    otp: string;
-}
 
-interface ResendOTPRequest {
-    email: string;
-}
 
 class AuthServiceBase {
     private readonly pathUrl = "authentication"

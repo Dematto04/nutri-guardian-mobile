@@ -11,7 +11,11 @@ function ExploreLayout() {
           headerTitleAlign: "center",
           headerShadowVisible: false,
           headerTitle: () => {
-            return <ThemedText type="subtitle">Find Products</ThemedText>;
+            return (
+              <ThemedText type="subtitle">
+                Hôm nay bạn thèm gì nào 😋
+              </ThemedText>
+            );
           },
         }}
       />
@@ -24,6 +28,9 @@ function ExploreLayout() {
           headerTitleAlign: "center",
         })}
       />
+      <Stack.Screen name="recipe-detail/[id]" options={{
+        headerTitle: "Hướng dẫn món ngon"
+      }} />
     </Stack>
   );
 }

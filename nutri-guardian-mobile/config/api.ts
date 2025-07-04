@@ -8,9 +8,8 @@ const api = axios.create({
 // Add a request interceptor
 api.interceptors.request.use(
   async function (config) {
-
     //chạy trước khi call api
-    const token = await AsyncStorage.getItem("token");
+    const token = await AsyncStorage.getItem("accessToken");
     //set token cho api
     config.headers.Authorization = `Bearer ${token}`;
     return config;
