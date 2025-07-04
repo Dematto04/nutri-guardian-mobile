@@ -6,3 +6,12 @@ export interface RegisterRequestDto {
     dateOfBirth: string,
     gender: string
 }
+export interface VerifyOTPRequest {
+    userId: string;
+    code: string;
+    type: number;
+}
+
+export interface ResendOTPRequest {
+    email: string;
+}

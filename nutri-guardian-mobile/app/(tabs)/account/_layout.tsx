@@ -4,7 +4,7 @@ import React from "react";
 import { Pressable } from "react-native";
 function AccountStack() {
   const router = useRouter();
-  
+
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -24,6 +24,7 @@ function AccountStack() {
         name="addcard"
         options={{ title: "Add Credit Card", headerTitleAlign: "center" }}
       />
+      <Stack.Screen name="profile" options={{ headerShown: false }} />
     </Stack>
   );
 }

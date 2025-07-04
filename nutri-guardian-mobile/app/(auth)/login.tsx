@@ -13,36 +13,40 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = async () => {
-    if(!email || !password){
+    if (!email || !password) {
       Toast.show({
         type: "error",
         text1: "Đăng nhập thất bại",
         text2: "Vui lòng nhập email và mật khẩu",
         swipeable: true,
       });
-      return
+      return;
     }
     try {
       const res = await AuthService.login({ email, password });
 
       if (res.status === 200) {
-        const account = res.data.data
+        const account = res.data.data;
         Toast.show({
           type: "success",
           text1: "Đăng nhập thất thành công",
           text2: `Xin chào ${account.fullName} 😊`,
         });
-        await AsyncStorage.setItem("accessToken", account.token)
-        await AsyncStorage.setItem("refreshToken", account.refreshToken)
-        await AsyncStorage.setItem("user", JSON.stringify(account))
+        await AsyncStorage.setItem("accessToken", account.token);
+        await AsyncStorage.setItem("refreshToken", account.refreshToken);
+        await AsyncStorage.setItem("user", JSON.stringify(account));
+        console.log(res);
+
         router.replace("/(tabs)/education");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log({ error });
       Toast.show({
         type: "error",
         text1: "Đăng nhập thất bại",
-        text2: "Sai tài khoản hoặc mật khẩu",
+        text2: error.response.data.messages.EmailVerification
+          ? "Tài khoản chưa xác nhận email"
+          : "Sai tài khoản hoặc mật khẩu",
         swipeable: true,
       });
     }
@@ -52,7 +56,7 @@ export default function LoginScreen() {
     <ThemedView style={styles.container}>
       <View style={styles.formContainer}>
         <ThemedText type="subtitle" style={styles.title}>
-          Welcome Back!
+          Xin chào!
         </ThemedText>
 
         <View style={styles.inputContainer}>
@@ -64,7 +68,7 @@ export default function LoginScreen() {
             onChangeText={setEmail}
           />
           <ThemedInput
-            placeholder="Password"
+            placeholder="Mật khẩu"
             secureTextEntry
             value={password}
             onChangeText={setPassword}
@@ -75,11 +79,11 @@ export default function LoginScreen() {
 
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: Colors.text.secondary }]}>
-            Don't have an account?
+            Chưa có tài khoản?
           </Text>
           <View>
             <ThemedButton
-              title="Register"
+              title="Đăng kí"
               variant="secondary"
               onPress={() => router.push("/(auth)/register")}
             />

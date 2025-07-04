@@ -31,14 +31,13 @@ interface Account {
   tokenExpiresAt: string;
 }
 
-
-
 const menuItems = [
   {
     key: "info",
-    label: "Information",
+    label: "Thông tin cá nhân",
     icon: <FontAwesome5 name="user" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-down" size={20} color="#222" />,
+    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
+    route: "profile",
     onPress: null,
   },
   {
@@ -46,6 +45,7 @@ const menuItems = [
     label: "My Details",
     icon: <Feather name="credit-card" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
+    route: "profile",
     onPress: null,
   },
   {
@@ -54,6 +54,8 @@ const menuItems = [
     icon: <Ionicons name="location-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
     onPress: null,
+    route: "profile",
+
   },
   {
     key: "payment",
@@ -70,6 +72,8 @@ const menuItems = [
     ),
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
     onPress: null,
+    route: "profile",
+
   },
   {
     key: "notifications",
@@ -77,6 +81,8 @@ const menuItems = [
     icon: <Ionicons name="notifications-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
     onPress: null,
+    route: "profile",
+
   },
   {
     key: "help",
@@ -84,6 +90,8 @@ const menuItems = [
     icon: <Ionicons name="help-circle-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
     onPress: null,
+    route: "profile",
+
   },
   {
     key: "about",
@@ -91,6 +99,8 @@ const menuItems = [
     icon: <Ionicons name="information-circle-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
     onPress: null,
+    route: "profile",
+
   },
 ];
 
@@ -115,14 +125,19 @@ function AccountScreen() {
     getAccount();
   }, []);
 
-  const handleLogout = async ()=> {
-    await AuthService.logout()
-    router.replace("/(auth)/login")
-  }
+  const handleLogout = async () => {
+    await AuthService.logout();
+    router.replace("/(auth)/login");
+  };
 
   if (!account) {
     return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+      <View
+        style={[
+          styles.container,
+          { justifyContent: "center", alignItems: "center" },
+        ]}
+      >
         <Text>Loading account information...</Text>
       </View>
     );
@@ -133,9 +148,13 @@ function AccountScreen() {
       <ScrollView contentContainerStyle={{ paddingBottom: 32, marginTop: 16 }}>
         {/* Profile */}
         <View style={styles.profileCard}>
-          <Image 
-            source={account.profileImageUrl ? { uri: account.profileImageUrl } : require('../../../assets/images/default-avatar.webp')} 
-            style={styles.avatar} 
+          <Image
+            source={
+              account.profileImageUrl
+                ? { uri: account.profileImageUrl }
+                : require("../../../assets/images/default-avatar.webp")
+            }
+            style={styles.avatar}
           />
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -149,7 +168,12 @@ function AccountScreen() {
             </View>
             <Text style={styles.profileEmail}>{account.email}</Text>
             {account.subscriptionStatus && (
-              <Text style={[styles.profileEmail, { color: '#7DE1EF', marginTop: 4 }]}>
+              <Text
+                style={[
+                  styles.profileEmail,
+                  { color: "#7DE1EF", marginTop: 4 },
+                ]}
+              >
                 {account.subscriptionTier} Member
               </Text>
             )}
@@ -162,9 +186,7 @@ function AccountScreen() {
               key={item.key}
               style={styles.menuRow}
               activeOpacity={0.7}
-              onPress={() => {
-                if (item.onPress) router.push("/(tabs)/account/mycards");
-              }}
+              onPress={() => router.push(`/(tabs)/account/profile`)}
             >
               <View style={styles.menuIcon}>{item.icon}</View>
               <Text
@@ -184,10 +206,7 @@ function AccountScreen() {
           ))}
         </View>
         {/* Log Out */}
-        <TouchableOpacity
-          style={styles.logoutBtn}
-          onPress={handleLogout}
-        >
+        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Ionicons
             name="log-out-outline"
             size={22}
