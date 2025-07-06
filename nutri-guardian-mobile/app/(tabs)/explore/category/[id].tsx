@@ -68,8 +68,12 @@ function CategoryScreen() {
   const fetchRecipes = async () => {
     try {
       setLoading(true);
+      console.log({category});
+
       const res = await RecipeService.getRecipes(category as string);
       setRecipes(res.data.data.items);
+      console.log("Get recipe", res);
+      
     } catch (error: any) {
       setError(error.response?.data?.message || "Không thể tải công thức");
     } finally {

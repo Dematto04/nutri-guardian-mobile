@@ -61,7 +61,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="tracking/index"
+        name="tracking"
         options={{
           title: "Tracking",
           tabBarLabel: "Theo dõi",
