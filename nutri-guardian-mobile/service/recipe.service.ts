@@ -1,5 +1,5 @@
-import api from "@/config/api"
-import { RecipeDetailResponseDto } from "@/dtos/recipe/recipe.dto"
+import api from "@/config/api";
+
 
 class RecipeServiceBase {
     private readonly pathUrl = "recipes"
@@ -8,9 +8,13 @@ class RecipeServiceBase {
         return api.get(`${this.pathUrl}/filter-options`)
     }
     async getRecipes(cate: string){
-        return api.get(`${this.pathUrl}/search?IngredientCategory=${new URLSearchParams(cate)}`)
+        const params = new URLSearchParams({
+            IngredientCategory: cate
+        })
+        console.log(params);
+        return api.get(`${this.pathUrl}/search?${params}`)
     }
-    async getRecipeById(id: string): Promise<RecipeDetailResponseDto>{
+    async getRecipeById(id: string){
         return api.get(`${this.pathUrl}/${id}`)
     }
 }

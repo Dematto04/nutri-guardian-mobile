@@ -4,7 +4,7 @@ import { GluestackUIProvider } from "@gluestack-ui/themed";
 import {
   DarkTheme,
   DefaultTheme,
-  ThemeProvider
+  ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack, useRouter } from "expo-router";
@@ -14,8 +14,8 @@ import Toast from "react-native-toast-message";
 import "../global.css";
 
 export default function RootLayout() {
-  const router = useRouter()
-  
+  const router = useRouter();
+
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -31,7 +31,7 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="quiz" options={{ headerShown: false }} /> 
+          <Stack.Screen name="quiz" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="detail" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />

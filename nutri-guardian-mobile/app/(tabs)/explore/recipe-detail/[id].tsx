@@ -1,4 +1,5 @@
 // import { RecipeDetailResponseDto } from '@/dtos/recipe/recipe.dto';
+import RecipeDetailSkeleton from "@/components/explore/RecipeDetailSkeleton";
 import CookingSteps from "@/components/ui/CookingSteps";
 import { Colors } from "@/constants/Colors";
 import { RecipeService } from "@/service/recipe.service";
@@ -6,14 +7,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Dimensions,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 const { width } = Dimensions.get("window");
@@ -88,14 +88,12 @@ export default function RecipeDetail() {
         return "restaurant-outline";
     }
   };
+  const handleAddMeal = (id: string) => {
+    console.log(id);
+  };
 
   if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF6B6B" />
-        <Text style={styles.loadingText}>Đang tải công thức...</Text>
-      </View>
-    );
+    return <RecipeDetailSkeleton />;
   }
 
   if (error || !recipe) {
@@ -115,12 +113,16 @@ export default function RecipeDetail() {
       <View style={styles.imageContainer}>
         <Image
           source={{
-            uri: recipe.thumbnailImageUrl || "https://via.placeholder.com/400x300",
+            uri:
+              recipe.thumbnailImageUrl || "https://via.placeholder.com/400x300",
           }}
           style={styles.recipeImage}
           resizeMode="cover"
         />
-        <TouchableOpacity style={styles.favoriteButton}>
+        <TouchableOpacity
+          style={styles.favoriteButton}
+          onPress={() => handleAddMeal(id as string)}
+        >
           <Ionicons
             name={isFavorite ? "heart" : "heart-outline"}
             size={24}
@@ -131,9 +133,7 @@ export default function RecipeDetail() {
 
       <View style={styles.contentContainer}>
         {/* Recipe Title */}
-        <Text style={styles.recipeTitle}>
-          {recipe.name || "Tên công thức"}
-        </Text>
+        <Text style={styles.recipeTitle}>{recipe.name || "Tên công thức"}</Text>
 
         {/* Recipe Info Badges */}
         <View style={styles.infoBadgesContainer}>
@@ -187,10 +187,10 @@ export default function RecipeDetail() {
         <View style={styles.infoBadgesContainer}>
           {recipe.cuisineType && (
             <View style={styles.infoBadge}>
-              <Ionicons 
-                name={getCuisineIcon(recipe.cuisineType)} 
-                size={16} 
-                color="#666" 
+              <Ionicons
+                name={getCuisineIcon(recipe.cuisineType)}
+                size={16}
+                color="#666"
               />
               <Text style={styles.infoBadgeText}>{recipe.cuisineType}</Text>
             </View>
@@ -198,10 +198,10 @@ export default function RecipeDetail() {
 
           {recipe.mealType && (
             <View style={styles.infoBadge}>
-              <Ionicons 
-                name={getMealTypeIcon(recipe.mealType)} 
-                size={16} 
-                color="#666" 
+              <Ionicons
+                name={getMealTypeIcon(recipe.mealType)}
+                size={16}
+                color="#666"
               />
               <Text style={styles.infoBadgeText}>{recipe.mealType}</Text>
             </View>
@@ -237,8 +237,8 @@ export default function RecipeDetail() {
         {recipe.allergens && recipe.allergens.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>
-              <Ionicons name="warning-outline" size={20} color="#FF6B6B" /> 
-              {" "}Chất gây dị ứng
+              <Ionicons name="warning-outline" size={20} color="#FF6B6B" /> Chất
+              gây dị ứng
             </Text>
             <View style={styles.allergensContainer}>
               {recipe.allergens.map((allergen: string, index: number) => (
@@ -255,8 +255,12 @@ export default function RecipeDetail() {
         {recipe.allergenFreeClaims && recipe.allergenFreeClaims.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>
-              <Ionicons name="checkmark-circle-outline" size={20} color="#4CAF50" />
-              {" "}Không chứa
+              <Ionicons
+                name="checkmark-circle-outline"
+                size={20}
+                color="#4CAF50"
+              />{" "}
+              Không chứa
             </Text>
             <View style={styles.allergenFreeContainer}>
               {recipe.allergenFreeClaims.map((claim: string, index: number) => (
@@ -277,11 +281,15 @@ export default function RecipeDetail() {
               <View key={index} style={styles.enhancedIngredientItem}>
                 <View style={styles.ingredientHeader}>
                   <View style={styles.ingredientNumber}>
-                    <Text style={styles.ingredientNumberText}>{ingredient.orderIndex || index + 1}</Text>
+                    <Text style={styles.ingredientNumberText}>
+                      {ingredient.orderIndex || index + 1}
+                    </Text>
                   </View>
                   <View style={styles.ingredientMainInfo}>
                     <Text style={styles.ingredientName}>
-                      {typeof ingredient === "string" ? ingredient : ingredient.name}
+                      {typeof ingredient === "string"
+                        ? ingredient
+                        : ingredient.name}
                     </Text>
                     {typeof ingredient === "object" && (
                       <View style={styles.ingredientQuantityContainer}>
@@ -294,8 +302,14 @@ export default function RecipeDetail() {
                 </View>
                 {typeof ingredient === "object" && ingredient.notes && (
                   <View style={styles.ingredientNotes}>
-                    <Ionicons name="information-circle-outline" size={14} color="#666" />
-                    <Text style={styles.ingredientNotesText}>{ingredient.notes}</Text>
+                    <Ionicons
+                      name="information-circle-outline"
+                      size={14}
+                      color="#666"
+                    />
+                    <Text style={styles.ingredientNotesText}>
+                      {ingredient.notes}
+                    </Text>
                   </View>
                 )}
               </View>
@@ -311,8 +325,8 @@ export default function RecipeDetail() {
         {recipe.nutrition && recipe.nutrition.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>
-              <Ionicons name="fitness-outline" size={20} color="#4CAF50" />
-              {" "}Thông tin dinh dưỡng
+              <Ionicons name="fitness-outline" size={20} color="#4CAF50" />{" "}
+              Thông tin dinh dưỡng
             </Text>
             <View style={styles.nutritionContainer}>
               {recipe.nutrition.map((nutrient: any, index: number) => (
@@ -355,16 +369,12 @@ export default function RecipeDetail() {
             <View style={styles.statItem}>
               <Ionicons name="heart-outline" size={20} color="#FF6B6B" />
               <Text style={styles.statLabel}>Lượt thích</Text>
-              <Text style={styles.statValue}>
-                {recipe.likesCount || "0"}
-              </Text>
+              <Text style={styles.statValue}>{recipe.likesCount || "0"}</Text>
             </View>
             <View style={styles.statItem}>
               <Ionicons name="bookmark-outline" size={20} color="#4CAF50" />
               <Text style={styles.statLabel}>Lưu</Text>
-              <Text style={styles.statValue}>
-                {recipe.savesCount || "0"}
-              </Text>
+              <Text style={styles.statValue}>{recipe.savesCount || "0"}</Text>
             </View>
           </View>
         </View>
@@ -412,18 +422,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FAFAFA",
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FAFAFA",
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: "#666",
-    fontWeight: "500",
-  },
+  // Loading UI replaced with RecipeDetailSkeleton component
   errorContainer: {
     flex: 1,
     justifyContent: "center",

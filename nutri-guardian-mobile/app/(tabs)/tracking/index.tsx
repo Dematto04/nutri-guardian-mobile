@@ -1,209 +1,433 @@
-import { Feather, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
-import React from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Colors } from "@/constants/Colors";
+import { MealPlanService } from "@/service/mealPlan.service";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Box,
+  Divider,
+  Text as GlueText,
+  HStack,
+  Progress,
+  ScrollView,
+  VStack,
+} from "@gluestack-ui/themed";
+import { useIsFocused } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const profile = {
-  name: 'Jack - J97',
-  email: 'Phuongtuanmeomeo@gmail.com',
-  avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+interface MealEntry {
+  id: number;
+  // Add other meal entry properties if needed
 }
 
-const trackingItems = [
-  {
-    key: '1',
-    icon: <Ionicons name="thumbs-up" size={28} color="#7DE1EF" />, // Food Recommend
-    title: 'Food Recommend',
-    date: 'October 21 2021',
-    locked: false,
-  },
-  {
-    key: '2',
-    icon: <Ionicons name="heart-outline" size={28} color="#7DE1EF" />, // Health Tracking
-    title: 'Health Tracking',
-    date: 'October 21 2021',
-    locked: false,
-  },
-  {
-    key: '3',
-    icon: <MaterialCommunityIcons name="map-marker-path" size={28} color="#7DE1EF" />, // Daily Tracking
-    title: 'Daily Tracking',
-    date: 'October 21 2021',
-    locked: false,
-  },
-  {
-    key: '4',
-    icon: <Feather name="credit-card" size={28} color="#C4C4C4" />, // Membership (locked)
-    title: 'Membership',
-    date: 'Locking',
-    locked: true,
-  },
-  {
-    key: '5',
-    icon: <FontAwesome5 name="user-lock" size={28} color="#C4C4C4" />, // Membership (locked)
-    title: 'Membership',
-    date: 'Locking',
-    locked: true,
-  },
-]
+interface MealPlan {
+  id: number;
+  name: string;
+  startDate: string;
+  endDate: string;
+  planType: string;
+  notes: string;
+  totalMeals: number;
+  completedMeals: number;
+  createdAt: string;
+  mealEntries: MealEntry[];
+}
+
+interface MealPlanResponse {
+  isSucceeded: boolean;
+  timestamp: string;
+  messages: {
+    Success: string[];
+  };
+  data: {
+    items: MealPlan[];
+    pageNumber: number;
+    pageSize: number;
+    totalCount: number;
+    totalPages: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+  };
+  pagination: null;
+}
 
 function TrackingScreen() {
-  return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Ionicons name="arrow-back" size={24} color="black" />
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const isFocused = useIsFocused();
+  const router = useRouter();
+
+  const getMealPlan = async (showLoader = true) => {
+    if (showLoader) setIsLoading(true);
+    setError(null);
+
+    try {
+      const res = await MealPlanService.getMealPlan();
+      const responseData = res.data as MealPlanResponse;
+
+      if (responseData.isSucceeded && responseData.data?.items) {
+        setMealPlans(responseData.data.items);
+      } else {
+        setError("Không thể tải dữ liệu kế hoạch bữa ăn");
+      }
+    } catch (error) {
+      console.log("Get meal plan error", { error });
+      setError("Đã xảy ra lỗi khi tải kế hoạch bữa ăn");
+    } finally {
+      setIsLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    getMealPlan(false);
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      getMealPlan();
+    }
+  }, [isFocused]);
+
+  // Format date for display
+  const formatDisplayDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("vi-VN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
+
+  // Calculate completion percentage
+  const calculateCompletion = (completed: number, total: number) => {
+    if (total === 0) return 0;
+    return Math.round((completed / total) * 100);
+  };
+
+  const renderMealPlanCard = (mealPlan: MealPlan) => {
+    const completionPercentage = calculateCompletion(
+      mealPlan.completedMeals,
+      mealPlan.totalMeals
+    );
+
+    return (
+      <View key={mealPlan.id} style={styles.mealPlanCard}>
+        <HStack space="md" alignItems="center" mb="$2">
+          <Feather name="clipboard" size={24} color={Colors.primary} />
+          <GlueText fontSize="$lg" fontWeight="$bold" color="$coolGray800">
+            {mealPlan.name}
+          </GlueText>
+        </HStack>
+
+        <Divider my="$2" />
+
+        <VStack space="sm">
+          {/* Date Range */}
+          <HStack space="sm" alignItems="center">
+            <MaterialIcons name="date-range" size={18} color="#64748b" />
+            <GlueText fontSize="$sm" color="$coolGray600">
+              {formatDisplayDate(mealPlan.startDate)} -{" "}
+              {formatDisplayDate(mealPlan.endDate)}
+            </GlueText>
+          </HStack>
+
+          {/* Notes */}
+          {mealPlan.notes && (
+            <HStack space="sm" alignItems="flex-start">
+              <Ionicons
+                name="document-text-outline"
+                size={18}
+                color="#64748b"
+                style={{ marginTop: 2 }}
+              />
+              <GlueText fontSize="$sm" color="$coolGray600" flex={1}>
+                {mealPlan.notes}
+              </GlueText>
+            </HStack>
+          )}
+
+          {/* Progress Section */}
+          <Box mt="$2">
+            <HStack justifyContent="space-between" mb="$1">
+              <GlueText fontSize="$xs" color="$coolGray500">
+                Tiến độ
+              </GlueText>
+              <GlueText
+                fontSize="$xs"
+                color="$coolGray700"
+                fontWeight="$medium"
+              >
+                {mealPlan.completedMeals}/{mealPlan.totalMeals} bữa ăn
+              </GlueText>
+            </HStack>
+
+            <Progress value={completionPercentage} size="sm">
+              <Progress.FilledTrack bg={Colors.primary} />
+            </Progress>
+
+            <HStack justifyContent="flex-end" mt="$1">
+              <GlueText
+                fontSize="$xs"
+                color={Colors.primary}
+                fontWeight="$medium"
+              >
+                {completionPercentage}% hoàn thành
+              </GlueText>
+            </HStack>
+          </Box>
+        </VStack>
+
+        <TouchableOpacity
+          style={styles.detailButton}
+          onPress={() => {
+            // Navigate to meal plan detail screen (to be implemented)
+            router.push({
+              pathname: "/tracking/meal-plan-detail",
+              params: {
+                id: mealPlan.id
+              }
+            })
+            console.log("View meal plan details:", mealPlan.id);
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={styles.detailButtonText}>Xem chi tiết</Text>
+            <Ionicons
+              name="chevron-forward"
+              size={16}
+              color="white"
+              style={{ marginLeft: 4 }}
+            />
+          </View>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Tracking</Text>
-        <View style={{ width: 24 }} />
       </View>
+    );
+  };
 
-      {/* Profile Card */}
-      <View style={styles.profileCard}>
-        <Image source={{ uri: profile.avatar }} style={styles.avatar} />
-        <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={styles.profileName}>{profile.name}</Text>
-            <Feather name="edit-2" size={14} color="#7DE1EF" style={{ marginLeft: 4 }} />
+  // Main render method
+  return (
+    <SafeAreaView style={styles.container} edges={["top"]}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[Colors.primary]}
+          />
+        }
+      >
+        {isLoading && !refreshing ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={Colors.primary} />
+            <Text style={styles.loadingText}>Đang tải kế hoạch bữa ăn...</Text>
           </View>
-          <Text style={styles.profileEmail}>{profile.email}</Text>
-        </View>
-      </View>
+        ) : error ? (
+          <View style={styles.errorContainer}>
+            <Ionicons
+              name="alert-circle-outline"
+              size={32}
+              color="#ef4444"
+              style={{ marginBottom: 8 }}
+            />
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity
+              style={styles.retryButton}
+              onPress={() => getMealPlan()}
+            >
+              <Text style={styles.retryButtonText}>Thử lại</Text>
+            </TouchableOpacity>
+          </View>
+        ) : mealPlans.length === 0 ? (
+          <View style={styles.emptyBox}>
+            <Text style={styles.emptyTitle}>
+              Bạn chưa có kế hoạch bữa ăn nào
+            </Text>
+            <Text style={styles.emptyDesc}>
+              Hãy bắt đầu lên kế hoạch bữa ăn để theo dõi dinh dưỡng và sức khỏe
+              của bạn dễ dàng hơn.
+            </Text>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => router.push("/tracking/create-meal-plan")}
+            >
+              <Text style={styles.addButtonText}>+ Thêm kế hoạch bữa ăn</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.mealPlanContainer}>
+            <HStack
+              alignItems="center"
+              justifyContent="space-between"
+              px="$3"
+              py="$2"
+              mb="$2"
+            >
+              <GlueText fontSize="$xl" fontWeight="$bold" color="$coolGray800">
+                Kế hoạch bữa ăn của bạn
+              </GlueText>
+              <TouchableOpacity
+                style={styles.addPlanButton}
+                onPress={() => router.push("/tracking/create-meal-plan")}
+              >
+                <Ionicons name="add" size={18} color="white" />
+              </TouchableOpacity>
+            </HStack>
 
-      {/* Tracking List */}
-      <View style={styles.listCard}>
-        {trackingItems.map((item, idx) => (
-          <View key={item.key} style={styles.listItemRow}>
-            <View style={styles.iconCol}>
-              <View style={[styles.iconCircle, item.locked && styles.iconCircleLocked]}>
-                {item.icon}
-              </View>
-              {idx < trackingItems.length - 1 && (
-                <View style={[styles.verticalLine, item.locked && styles.verticalLineLocked]} />
-              )}
-            </View>
-            <View style={styles.itemContent}>
-              <Text style={[styles.itemTitle, item.locked && styles.itemTitleLocked]}>{item.title}</Text>
-              <Text style={[styles.itemDate, item.locked && styles.itemDateLocked]}>{item.date}</Text>
-            </View>
+            {mealPlans.map((mealPlan) => renderMealPlanCard(mealPlan))}
           </View>
-        ))}
-      </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F8FA',
-    paddingHorizontal: 0,
+    backgroundColor: "#f9fafb",
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#ECECEC',
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 20,
   },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#222',
+  mealPlanContainer: {
+    flex: 1,
+    paddingVertical: 16,
   },
-  profileCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    margin: 16,
-    borderRadius: 8,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
+  emptyBox: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 32,
+    paddingVertical: 40,
   },
-  avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    marginRight: 16,
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1e293b",
+    marginBottom: 12,
+    textAlign: "center",
   },
-  profileName: {
+  emptyDesc: {
     fontSize: 16,
-    fontWeight: '700',
-    color: '#222',
+    color: "#64748b",
+    marginBottom: 32,
+    textAlign: "center",
+    lineHeight: 24,
   },
-  profileEmail: {
-    fontSize: 13,
-    color: '#A0A0A0',
-    marginTop: 2,
+  addButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: 16,
+    paddingHorizontal: 36,
+    borderRadius: 12,
+    alignItems: "center",
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    elevation: 4,
   },
-  listCard: {
-    backgroundColor: '#fff',
-    marginHorizontal: 16,
+  addButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  detailButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 8,
-    paddingVertical: 8,
+    alignItems: "center",
+    marginTop: 16,
+    alignSelf: "flex-end",
+  },
+  detailButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 60,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: "#64748b",
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 32,
+    paddingVertical: 60,
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#ef4444",
+    marginBottom: 24,
+    textAlign: "center",
+  },
+  retryButton: {
+    backgroundColor: "#f1f5f9",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+  },
+  retryButtonText: {
+    color: "#334155",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  addPlanButton: {
+    backgroundColor: Colors.primary,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  mealPlanCard: {
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 16,
+    margin: 12,
     marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  listItemRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F2',
-    minHeight: 60,
-  },
-  iconCol: {
-    alignItems: 'center',
-    width: 56,
-  },
-  iconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#E6F8FB',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconCircleLocked: {
-    backgroundColor: '#F2F2F2',
-  },
-  verticalLine: {
-    width: 2,
-    flex: 1,
-    backgroundColor: '#E6F8FB',
-    marginTop: 2,
-  },
-  verticalLineLocked: {
-    backgroundColor: '#F2F2F2',
-  },
-  itemContent: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingLeft: 4,
-  },
-  itemTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#222',
-  },
-  itemTitleLocked: {
-    color: '#C4C4C4',
-  },
-  itemDate: {
-    fontSize: 11,
-    color: '#A0A0A0',
-    marginTop: 2,
-  },
-  itemDateLocked: {
-    color: '#C4C4C4',
-  },
-})
+});
 
-export default TrackingScreen
+export default TrackingScreen;

@@ -5,13 +5,25 @@ import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { AuthService } from "@/service/auth.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
-import { useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
+  const isFocused = useIsFocused();
   const [password, setPassword] = useState("");
+  const router = useRouter()
+  useEffect(() => {
+    const checkLogined = async () => {
+      const token = await AsyncStorage.getItem("accessToken")
+      if(token){
+        router.replace('/(tabs)/education')
+      }
+    };
+    checkLogined()
+  }, [isFocused]);
   const handleLogin = async () => {
     if (!email || !password) {
       Toast.show({
