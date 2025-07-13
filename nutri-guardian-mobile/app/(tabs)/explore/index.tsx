@@ -1,4 +1,5 @@
 import { ThemedView } from "@/components/ThemedView";
+import ExploreSkeleton from "@/components/explore/ExploreSkeleton";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { RecipeService } from "@/service/recipe.service";
 import { useRouter } from "expo-router";
@@ -117,12 +118,16 @@ function ExploreScreen() {
   return (
     <ThemedView className="flex-1 px-6 bg-white">
       {loading ? (
-        <View className="flex-1 justify-center items-center">
-          <Text>Đang tải...</Text>
-        </View>
+        <ExploreSkeleton />
       ) : error ? (
         <View className="flex-1 justify-center items-center">
-          <Text className="text-red-500">{error}</Text>
+          <Text className="text-red-500 text-center px-4 mb-4">{error}</Text>
+          <TouchableOpacity 
+            className="mt-4 bg-primary px-4 py-2 rounded-lg"
+            onPress={fetchCategories}
+          >
+            <Text className="text-white font-medium">Thử lại</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <FlatList
