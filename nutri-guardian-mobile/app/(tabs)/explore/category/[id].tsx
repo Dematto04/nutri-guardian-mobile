@@ -1,4 +1,5 @@
 import { ThemedView } from "@/components/ThemedView";
+import RecipeListSkeleton from "@/components/explore/RecipeListSkeleton";
 import ProductCard from "@/components/ui/ProductCard";
 import { RecipeService } from "@/service/recipe.service";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -17,7 +18,7 @@ import {
 } from "@gluestack-ui/themed";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, FlatList, View } from "react-native";
+import { Dimensions, FlatList, View } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -87,17 +88,29 @@ function CategoryScreen() {
 
   if (loading) {
     return (
-      <ThemedView className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#83B177" />
-        <Text className="mt-4 text-gray-600">Đang tải...</Text>
+      <ThemedView className="flex-1">
+        <RecipeListSkeleton categoryName={true} />
       </ThemedView>
     );
   }
 
   if (error) {
     return (
-      <ThemedView className="flex-1 justify-center items-center">
-        <Text className="text-red-500">{error}</Text>
+      <ThemedView className="flex-1 justify-center items-center p-4">
+        <MaterialIcons name="error-outline" size={48} color="#f44336" />
+        <Text className="text-red-500 text-center mt-4 mb-6">{error}</Text>
+        <Button
+          onPress={fetchRecipes}
+          bgColor="$primary500"
+          borderRadius="$md"
+          px="$4"
+          py="$2"
+        >
+          <HStack space="sm" alignItems="center">
+            <MaterialIcons name="refresh" size={20} color="white" />
+            <Text className="text-white font-medium">Thử lại</Text>
+          </HStack>
+        </Button>
       </ThemedView>
     );
   }

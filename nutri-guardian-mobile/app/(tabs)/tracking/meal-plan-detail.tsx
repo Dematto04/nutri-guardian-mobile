@@ -6,12 +6,12 @@ import { Progress } from "@gluestack-ui/themed";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-    Alert,
-    RefreshControl,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View
+  Alert,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -282,7 +282,6 @@ export default function MealPlanDetail() {
   
   // Handle meal completion toggle
   const handleToggleMealCompletion = (meal: NormalizedMealEntry) => {
-    // In a real app, you'd call an API to update the meal status
     Alert.alert(
       "Thông báo",
       `${meal.isCompleted ? "Đánh dấu chưa hoàn thành" : "Đánh dấu đã hoàn thành"} món ${meal.mealName}?`,
@@ -294,8 +293,6 @@ export default function MealPlanDetail() {
         {
           text: "Xác nhận",
           onPress: () => {
-            // For now we'll just show a confirmation, 
-            // in a real app this would update the API
             Alert.alert("Thông báo", "Đã cập nhật trạng thái món ăn");
           }
         }
@@ -317,7 +314,6 @@ export default function MealPlanDetail() {
           text: "Xóa",
           style: "destructive",
           onPress: () => {
-            // For now we'll just show a confirmation
             Alert.alert("Thông báo", "Đã xóa món ăn");
           }
         }
@@ -334,7 +330,7 @@ export default function MealPlanDetail() {
   const handleViewRecipe = (recipeId: number) => {
     // Navigate to recipe detail screen
     router.push({
-      pathname: "/explore/recipe-detail",
+      pathname: "/(tabs)/explore/recipe-detail/[id]",
       params: { id: recipeId }
     });
   };
