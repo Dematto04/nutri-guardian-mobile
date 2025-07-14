@@ -1,5 +1,5 @@
-import mastercard from "@/assets/images/mastercard.png";
-import visa from "@/assets/images/visa.png";
+const mastercard = require("@/assets/images/mastercard.png");
+const visa = require("@/assets/images/visa.png");
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';

@@ -2,9 +2,9 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
+    DarkTheme,
+    DefaultTheme,
+    ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack, useRouter } from "expo-router";
@@ -30,9 +30,11 @@ export default function RootLayout() {
     <GluestackUIProvider config={config}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="quiz" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="payment" options={{ headerShown: false }} />
           <Stack.Screen name="detail" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>

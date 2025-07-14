@@ -5,20 +5,23 @@ import { ScrollView } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 
+import { SubscriptionGate } from "@/components/SubscriptionGate";
+import { useSubscription } from "@/hooks/useSubscription";
 import React, { useRef, useState } from "react";
 import {
-  Alert,
-  Animated,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    Alert,
+    Animated,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from "react-native";
+
 
 type MealPlanItem = {
   meal: string;
@@ -41,6 +44,9 @@ export default function CreateMealPlanScreen() {
   // Animation refs
   const buttonScale = useRef(new Animated.Value(1)).current;
   const router = useRouter()
+  
+  // Subscription hook
+  const { hasActiveSubscription } = useSubscription();
   
   // Form state
   const [formData, setFormData] = useState<MealPlanCreateRequest>({
@@ -144,6 +150,22 @@ export default function CreateMealPlanScreen() {
       day: '2-digit',
     });
   };
+
+  // Check if this is a smart meal plan creation (we can add a prop later for this)
+  const isSmartMealPlan = formData.name.toLowerCase().includes('thông minh') || 
+                         formData.name.toLowerCase().includes('smart') ||
+                         formData.notes.toLowerCase().includes('ai');
+
+  // Show subscription gate for smart meal planning
+  if (isSmartMealPlan && !hasActiveSubscription) {
+    return (
+      <SubscriptionGate
+        title="Tạo Thực Đơn Thông Minh"
+        description="Tính năng tạo thực đơn thông minh với AI chỉ dành cho thành viên Premium. Nâng cấp ngay để trải nghiệm!"
+        featureName="Thực đơn thông minh với AI"
+      />
+    );
+  }
 
   return (
     <KeyboardAvoidingView 

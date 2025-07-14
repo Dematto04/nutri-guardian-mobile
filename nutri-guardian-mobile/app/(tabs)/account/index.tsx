@@ -1,20 +1,20 @@
 import { AuthService } from "@/service/auth.service";
 import {
-  Feather,
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
+    Feather,
+    FontAwesome5,
+    Ionicons,
+    MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 interface Account {
@@ -38,31 +38,13 @@ const menuItems = [
     icon: <FontAwesome5 name="user" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
     route: "profile",
-    onPress: null,
-  },
-  {
-    key: "details",
-    label: "My Details",
-    icon: <Feather name="credit-card" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    route: "profile",
-    onPress: null,
-  },
-  {
-    key: "address",
-    label: "Delivery Address",
-    icon: <Ionicons name="location-outline" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
   },
   {
     key: "payment",
     label: "Payment Methods",
     icon: <Feather name="credit-card" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: "mycards",
+    route: "mycards",
   },
   {
     key: "membership",
@@ -71,36 +53,21 @@ const menuItems = [
       <MaterialCommunityIcons name="shield-account" size={20} color="#7DE1EF" />
     ),
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
+    route: "subscription",
   },
   {
     key: "notifications",
     label: "Notifications",
     icon: <Ionicons name="notifications-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
+    route: "profile", // Will show in profile until separate screen is created
   },
   {
     key: "help",
-    label: "Help",
+    label: "Help & Support",
     icon: <Ionicons name="help-circle-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
-  },
-  {
-    key: "about",
-    label: "About",
-    icon: <Ionicons name="information-circle-outline" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
+    route: "profile", // Will show in profile until separate screen is created
   },
 ];
 
@@ -186,7 +153,7 @@ function AccountScreen() {
               key={item.key}
               style={styles.menuRow}
               activeOpacity={0.7}
-              onPress={() => router.push(`/(tabs)/account/profile`)}
+                              onPress={() => router.push(`/(tabs)/account/${item.route}` as any)}
             >
               <View style={styles.menuIcon}>{item.icon}</View>
               <Text

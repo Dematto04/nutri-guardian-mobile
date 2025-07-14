@@ -19,7 +19,7 @@ export default function LoginScreen() {
     const checkLogined = async () => {
       const token = await AsyncStorage.getItem("accessToken")
       if(token){
-        router.replace('/(tabs)/education')
+        router.replace('/(tabs)/explore')
       }
     };
     checkLogined()
@@ -49,7 +49,7 @@ export default function LoginScreen() {
         await AsyncStorage.setItem("user", JSON.stringify(account));
         console.log(res);
 
-        router.replace("/(tabs)/education");
+        router.replace("/(tabs)/explore");
       }
     } catch (error: any) {
       console.log({ error });
