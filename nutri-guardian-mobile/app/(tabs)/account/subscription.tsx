@@ -35,6 +35,8 @@ export default function SubscriptionScreen() {
       ]);
 
       if (statusResult.isSucceeded) {
+        console.log({statusResult});
+        
         console.log('📊 Status data:', JSON.stringify(statusResult.data, null, 2));
         setSubscriptionStatus(statusResult.data);
       }

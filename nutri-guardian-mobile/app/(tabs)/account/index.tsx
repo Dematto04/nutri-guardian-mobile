@@ -1,20 +1,20 @@
 import { AuthService } from "@/service/auth.service";
 import {
-    Feather,
-    FontAwesome5,
-    Ionicons,
-    MaterialCommunityIcons,
+  Feather,
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 interface Account {
@@ -40,15 +40,8 @@ const menuItems = [
     route: "profile",
   },
   {
-    key: "payment",
-    label: "Payment Methods",
-    icon: <Feather name="credit-card" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    route: "mycards",
-  },
-  {
     key: "membership",
-    label: "Nutri Guardian's Membership",
+    label: "Gói thành viên Nutri Guardian",
     icon: (
       <MaterialCommunityIcons name="shield-account" size={20} color="#7DE1EF" />
     ),
@@ -56,11 +49,20 @@ const menuItems = [
     route: "subscription",
   },
   {
+    key: "allergenProfile",
+    label: "Hồ sơ dị ứng",
+    icon: (
+      <MaterialCommunityIcons name="shield-alert" size={20} color="#FF9800" />
+    ),
+    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
+    route: "allergen-profile",
+  },
+  {
     key: "notifications",
     label: "Notifications",
     icon: <Ionicons name="notifications-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    route: "profile", // Will show in profile until separate screen is created
+    route: "profile",
   },
   {
     key: "help",

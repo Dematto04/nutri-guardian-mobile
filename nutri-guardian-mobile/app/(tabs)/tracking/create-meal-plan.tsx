@@ -10,16 +10,16 @@ import { SubscriptionGate } from "@/components/SubscriptionGate";
 import { useSubscription } from "@/hooks/useSubscription";
 import React, { useRef, useState } from "react";
 import {
-    Animated,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Animated,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -161,7 +161,7 @@ export default function CreateMealPlanScreen() {
   // Mode Selection Screen
   if (creationMode === 'select') {
     return (
-      <SubscriptionGate feature="meal-planning">
+      <SubscriptionGate featureName="meal-planning">
         <View style={styles.container}>
           <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
             {/* Header */}
@@ -245,8 +245,9 @@ export default function CreateMealPlanScreen() {
   // Smart Generation Mode
   if (creationMode === 'smart') {
     return (
-      <SubscriptionGate feature="smart-meal-planning">
+      <SubscriptionGate featureName="smart-meal-planning">
         <SmartMealPlanGenerator
+
           onGenerated={handleSmartGenerationSuccess}
           onCancel={handleSmartGenerationCancel}
         />
@@ -256,7 +257,7 @@ export default function CreateMealPlanScreen() {
 
   // Manual Creation Mode
   return (
-    <SubscriptionGate feature="meal-planning">
+    <SubscriptionGate featureName="meal-planning">
       <KeyboardAvoidingView 
         style={styles.container} 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -554,8 +555,6 @@ const styles = StyleSheet.create({
     color: '#334155',
     fontWeight: '600',
     letterSpacing: 0.25,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   input: {
     backgroundColor: '#f8fafc',

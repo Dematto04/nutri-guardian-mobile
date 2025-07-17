@@ -22,6 +22,12 @@ class AuthServiceBase {
     async resendOTP(form: ResendOTPRequest) {
         return api.post(`${this.pathUrl}/resend-otp`, form)
     }
+    async refreshToken(refreshToken: string, userId: number) {
+        return api.post(`${this.pathUrl}/refresh-token`, {
+            refreshToken,
+            userId
+        })
+    }
     async logout(){
         await AsyncStorage.removeItem('user')
         await AsyncStorage.removeItem('accessToken')

@@ -1,15 +1,15 @@
+import ai from "@/assets/images/ai_re.png";
 import { Colors } from "@/constants/Colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import React from "react";
 import {
-    Image,
-    ImageSourcePropType,
-    Text,
-    TouchableOpacity,
-    View,
+  Image,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 interface ProductCardProps {
-  image: ImageSourcePropType;
+  image: string;
   name: string;
   id: string;
   onPress?: () => void;
@@ -24,32 +24,33 @@ export default function ProductCard(item: ProductCardProps) {
         marginBottom: 20,
         borderWidth: 1,
         borderColor: "#E2E2E2",
-        minHeight: 250,
         width: "48%",
         marginHorizontal: "1%",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
+
       }}
       onPress={item.onPress}
     >
-      <View className="w-full">
+      <View className="w-full h-fit ">
         <Image
-          source={item.image}
+          source={item.image ? {uri : item.image} : ai }
           style={{
             width: "100%",
             borderRadius: 10,
             marginBottom: 8,
+            height: 200
           }}
-          resizeMode="contain"
+          resizeMode="center"
         />
         <Text className="font-semibold text-start text-lg">{item.name}</Text>
       </View>
       <View
         style={{
           width: "100%",
-          height: "auto",
           justifyContent: "flex-end",
           alignItems: "flex-end",
+          flexGrow: 1,
         }}
       >
         <View
@@ -57,6 +58,10 @@ export default function ProductCard(item: ProductCardProps) {
             backgroundColor: Colors.primary,
             padding: 9,
             borderRadius: 17,
+          
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
+            
           }}
         >
           <AntDesign name="search1" size={24} color="white" />

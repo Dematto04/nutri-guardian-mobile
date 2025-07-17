@@ -1,9 +1,9 @@
-import nut from "@/assets/images/peanut.jpg";
+
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function EducationDetail() {
@@ -38,12 +38,12 @@ function EducationDetail() {
   const mockViews = "730";
   const mockReadTime = "2.1 K"; // Assuming this was read time from screenshot, not views
   const mockTime = "6'"; // Assuming this is read time in minutes from screenshot
-  const mockImageUri = nut; // Placeholder image
+  // const mockImageUri = nut; // Placeholder image
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Image source={nut} style={styles.image} />
+        {/* <Image source={nut} style={styles.image} /> */}
         <View style={styles.contentContainer}>
           <Text style={styles.date}>{mockDate}</Text>
           <Text style={styles.category}>{article.category}</Text>

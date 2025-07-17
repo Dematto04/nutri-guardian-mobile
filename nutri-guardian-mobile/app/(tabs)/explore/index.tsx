@@ -7,14 +7,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Dimensions,
-    FlatList,
-    Image,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
@@ -491,7 +491,6 @@ const styles = {
     width: 160,
     height: 120,
     borderRadius: 12,
-    overflow: 'hidden',
     marginRight: 12,
   },
   recommendationImage: {

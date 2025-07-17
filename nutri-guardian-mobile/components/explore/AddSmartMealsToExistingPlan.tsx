@@ -4,12 +4,12 @@ import Slider from '@react-native-community/slider';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 
@@ -155,7 +155,7 @@ const AddSmartMealsToExistingPlan: React.FC = () => {
         Number(mealPlanId), 
         request
       );
-
+      
       if (response.data?.isSucceeded) {
         Toast.show({
           type: 'success',
@@ -166,10 +166,14 @@ const AddSmartMealsToExistingPlan: React.FC = () => {
         // Navigate back to tracking screen
         router.back();
       } else {
-        throw new Error(response.data?.messages?.Error?.[0] || 'Không thể thêm món ăn thông minh');
+        console.log({response});
+        
+        // throw new Error(response.data?.messages?.Error?.[0] || 'Không thể thêm món ăn thông minh');
       }
     } catch (error) {
-      console.error('❌ Add smart meals error:', error);
+      console.error('❌ Add smart meals error:', error.messages);
+      // console.log({error.message});
+      
       Toast.show({
         type: 'error',
         text1: 'Lỗi',

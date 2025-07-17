@@ -8,24 +8,21 @@ function FavouriteLayout() {
   return (
     <Stack
         screenOptions={{
-            
+            headerStyle: {
+              backgroundColor: '#FFF',
+            },
+            headerTintColor: '#2C3E50',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
         }}
     >
         <Stack.Screen
             name='index'
             options={{
-                title: "My Favourites",
+                title: "Yêu Thích",
                 headerTitleAlign: "center"
-
             }}
-        />
-        <Stack.Screen
-            name='wow'
-            options={({ route }) => ({
-                // title: route.params?.category
-                //     ? `Category: ${route.params.category}`
-                //     : "Category"
-            })}
         />
     </Stack>
   )

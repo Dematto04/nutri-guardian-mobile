@@ -32,6 +32,13 @@ function AccountStack() {
           headerTitleAlign: "center" 
         }} 
       />
+      <Stack.Screen 
+        name="allergen-profile" 
+        options={{ 
+          title: "Hồ sơ dị ứng", 
+          headerTitleAlign: "center" 
+        }} 
+      />
     </Stack>
   );
 }

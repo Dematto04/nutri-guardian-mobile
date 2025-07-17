@@ -25,6 +25,7 @@ function TrackingLayout() {
         options={{
           headerTitleAlign: "center",
           headerShadowVisible: false,
+          // headerShown: false,
           headerTitle: () => {
             return (
               <ThemedText type="subtitle">
@@ -46,6 +47,14 @@ function TrackingLayout() {
               </ThemedText>
             );
           },
+        }}
+      />
+      <Stack.Screen
+        name="add-smart-meals"
+        options={{
+          headerTitleAlign: "center",
+          headerShown: false,
+          headerShadowVisible: false,
         }}
       />
     </Stack>

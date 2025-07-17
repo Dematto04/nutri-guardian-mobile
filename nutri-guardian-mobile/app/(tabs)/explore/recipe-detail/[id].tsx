@@ -1,14 +1,16 @@
 // import { RecipeDetailResponseDto } from '@/dtos/recipe/recipe.dto';
+import ai_rec from "@/assets/images/ai_re.png";
 import MealPlanEntriesDrawer from "@/components/explore/MealPlanEntriesDrawer";
 import RecipeDetailSkeleton from "@/components/explore/RecipeDetailSkeleton";
 import CookingSteps from "@/components/ui/CookingSteps";
-
 import { RecipeService } from "@/service/recipe.service";
 import { recipeDetailStyles as styles } from "@/styles/explore/recipe-detail.style";
+import { FavoriteStorage } from "@/utils/favoriteStorage";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Image,
   ScrollView,
@@ -31,10 +33,16 @@ export default function RecipeDetail() {
     setLoading(true);
     setError(null);
     console.log({ id });
-    RecipeService.getRecipeById(String(id))
-      .then((res) => {
+    
+    // Load recipe data and favorite status
+    Promise.all([
+      RecipeService.getRecipeById(String(id)),
+      FavoriteStorage.isFavorite(String(id))
+    ])
+      .then(([res, favoriteStatus]) => {
         console.log({ res });
         setRecipe(res.data.data);
+        setIsFavorite(favoriteStatus);
       })
       .catch((err) => {
         setError("Không thể tải dữ liệu công thức.");
@@ -94,6 +102,45 @@ export default function RecipeDetail() {
     console.log(id);
   };
 
+  const handleToggleFavorite = async () => {
+    if (!recipe) return;
+
+    try {
+      if (isFavorite) {
+        // Remove from favorites
+        const success = await FavoriteStorage.removeFromFavorites(recipe.id);
+        if (success) {
+          setIsFavorite(false);
+          Alert.alert("Thành công", "Đã xóa khỏi danh sách yêu thích");
+        }
+      } else {
+        // Add to favorites
+        const favoriteRecipe = {
+          id: recipe.id,
+          name: recipe.name,
+          thumbnailImageUrl: recipe.thumbnailImageUrl,
+          prepTimeMinutes: recipe.prepTimeMinutes,
+          cookTimeMinutes: recipe.cookTimeMinutes,
+          difficultyLevel: recipe.difficultyLevel,
+          servings: recipe.servings,
+          cuisineType: recipe.cuisineType,
+          mealType: recipe.mealType,
+        };
+        
+        const success = await FavoriteStorage.addToFavorites(favoriteRecipe);
+        if (success) {
+          setIsFavorite(true);
+          Alert.alert("Thành công", "Đã thêm vào danh sách yêu thích");
+        } else {
+          Alert.alert("Thông báo", "Công thức đã có trong danh sách yêu thích");
+        }
+      }
+    } catch (error) {
+      Alert.alert("Lỗi", "Không thể cập nhật danh sách yêu thích");
+      console.error("Error toggling favorite:", error);
+    }
+  };
+
   if (loading) {
     return <RecipeDetailSkeleton />;
   }
@@ -114,23 +161,43 @@ export default function RecipeDetail() {
       {/* Recipe Image */}
       <View style={styles.imageContainer}>
         <Image
-          source={{
-            uri:
-              recipe.thumbnailImageUrl || "https://via.placeholder.com/400x300",
-          }}
+          source={
+            recipe.thumbnailImageUrl
+              ? {
+                  uri: recipe.thumbnailImageUrl,
+                }
+              : ai_rec
+          }
           style={styles.recipeImage}
           resizeMode="cover"
         />
-        <TouchableOpacity
-          style={styles.favoriteButton}
-          onPress={() => handleAddMeal(id as string)}
-        >
-          <Ionicons
-            name={isFavorite ? "heart" : "heart-outline"}
-            size={24}
-            color={isFavorite ? "#FF6B6B" : "#FFF"}
-          />
-        </TouchableOpacity>
+        
+        {/* Action Buttons Container */}
+        <View style={styles.actionButtonsContainer}>
+          {/* Add to Meal Plan Button */}
+          <TouchableOpacity
+            style={[styles.actionButton, styles.mealPlanButton]}
+            onPress={() => handleAddMeal(id as string)}
+          >
+            <Ionicons
+              name="add-circle"
+              size={24}
+              color="#FFF"
+            />
+          </TouchableOpacity>
+          
+          {/* Add to Favorites Button */}
+          <TouchableOpacity
+            style={[styles.actionButton, styles.favoriteButton]}
+            onPress={handleToggleFavorite}
+          >
+            <Ionicons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={24}
+              color={isFavorite ? "#FF6B6B" : "#FFF"}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.contentContainer}>

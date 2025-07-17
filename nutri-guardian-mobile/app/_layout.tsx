@@ -2,19 +2,19 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import "../global.css";
 
 export default function RootLayout() {
-  const router = useRouter();
+  // const router = useRouter();
 
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({

@@ -13,7 +13,7 @@ interface MealPlanCreateRequest {
 interface MealPlanEntryRequest {
     mealPlanId: string | number;
     mealDate: string | Date;
-    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack' | number | string | undefined;
     recipeId?: number;
     productId?: number;
     customMealName?: string;
@@ -55,6 +55,7 @@ interface GenerateSmartMealsRequest {
     replaceExisting?: boolean;
     preserveFavorites?: boolean;
 }
+
 
 class MealPlanServiceBase {
     private readonly pathUrl = "mealplans"
@@ -196,6 +197,9 @@ class MealPlanServiceBase {
                 varietyMode: true
             }
         });
+    }
+    mealPlanEntries(mealPlanId: string | number, body: MealPlanEntryRequest) {
+        return api.post(`${this.pathUrl}/${mealPlanId}/entries`, body)
     }
 }
 

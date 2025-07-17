@@ -32,6 +32,7 @@ export class SubscriptionService {
     
     const response = await api.get('/usersubscription/status');
     console.log('✅ Response status:', response.status);
+    console.log('Response:', response.data);
     return response.data;
   }
 
