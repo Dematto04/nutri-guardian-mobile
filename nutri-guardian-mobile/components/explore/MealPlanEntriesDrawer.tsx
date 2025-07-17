@@ -14,31 +14,31 @@
  */
 
 import {
-    Actionsheet,
-    ActionsheetBackdrop,
-    ActionsheetContent,
-    ActionsheetDragIndicator,
-    ActionsheetDragIndicatorWrapper,
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetDragIndicatorWrapper,
 } from "@/components/ui/actionsheet";
 import { Colors } from "@/constants/Colors";
 import { MealPlanService } from "@/service/mealPlan.service";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Alert,
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withSpring,
-    withTiming,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
@@ -117,6 +117,7 @@ interface IMealPlanEntriesDrawerProps {
   onMealPlanSelected?: (mealPlanId: number) => void;
   recipeId: number;
 }
+
 
 export default function MealPlanEntriesDrawer({
   showDrawer,
@@ -309,20 +310,9 @@ export default function MealPlanEntriesDrawer({
       const res = await MealPlanService.getMealPlan();
       console.log("API Response:", JSON.stringify(res.data, null, 2));
 
-      // Handle different API response structures
-      if (res.data?.data?.items) {
-        // Format with items array
-        setMealPlans(res.data.data.items);
-      } else if (Array.isArray(res.data?.data)) {
-        // Direct array format
-        setMealPlans(res.data.data);
-      } else if (res.data?.isSucceeded && Array.isArray(res.data?.data)) {
-        // Success format with array
-        setMealPlans(res.data.data);
-      } else {
-        // Fallback to test data
-        console.log("Using test data due to unexpected API response format");
-      }
+      setMealPlans(res.data.data.items)
+      console.log("mealPlans", res.data.data.items);
+      
     } catch (error) {
       console.log({ error });
       // Fallback to test data on error
@@ -691,7 +681,7 @@ export default function MealPlanEntriesDrawer({
             <View style={styles.container}>
               {loading ? (
                 <MealPlanSkeleton />
-              ) : mealPlans.length === 0 ? (
+              ) : (mealPlans.length === 0 ? (
                 <View style={styles.emptyContainer}>
                   <Text style={styles.emptyText}>
                     Không có kế hoạch bữa ăn nào
@@ -723,7 +713,7 @@ export default function MealPlanEntriesDrawer({
                     </View>
                   ))}
                 </ScrollView>
-              )}
+              ))}
             </View>
           )}
 

@@ -38,69 +38,38 @@ const menuItems = [
     icon: <FontAwesome5 name="user" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
     route: "profile",
-    onPress: null,
-  },
-  {
-    key: "details",
-    label: "My Details",
-    icon: <Feather name="credit-card" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    route: "profile",
-    onPress: null,
-  },
-  {
-    key: "address",
-    label: "Delivery Address",
-    icon: <Ionicons name="location-outline" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
-  },
-  {
-    key: "payment",
-    label: "Payment Methods",
-    icon: <Feather name="credit-card" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: "mycards",
   },
   {
     key: "membership",
-    label: "Nutri Guardian's Membership",
+    label: "Gói thành viên Nutri Guardian",
     icon: (
       <MaterialCommunityIcons name="shield-account" size={20} color="#7DE1EF" />
     ),
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
+    route: "subscription",
+  },
+  {
+    key: "allergenProfile",
+    label: "Hồ sơ dị ứng",
+    icon: (
+      <MaterialCommunityIcons name="shield-alert" size={20} color="#FF9800" />
+    ),
+    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
+    route: "allergen-profile",
   },
   {
     key: "notifications",
     label: "Notifications",
     icon: <Ionicons name="notifications-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
     route: "profile",
-
   },
   {
     key: "help",
-    label: "Help",
+    label: "Help & Support",
     icon: <Ionicons name="help-circle-outline" size={20} color="#222" />,
     rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
-  },
-  {
-    key: "about",
-    label: "About",
-    icon: <Ionicons name="information-circle-outline" size={20} color="#222" />,
-    rightIcon: <Ionicons name="chevron-forward" size={20} color="#222" />,
-    onPress: null,
-    route: "profile",
-
+    route: "profile", // Will show in profile until separate screen is created
   },
 ];
 
@@ -186,7 +155,7 @@ function AccountScreen() {
               key={item.key}
               style={styles.menuRow}
               activeOpacity={0.7}
-              onPress={() => router.push(`/(tabs)/account/profile`)}
+                              onPress={() => router.push(`/(tabs)/account/${item.route}` as any)}
             >
               <View style={styles.menuIcon}>{item.icon}</View>
               <Text

@@ -29,13 +29,30 @@ export const recipeDetailStyles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  favoriteButton: {
+  actionButtonsContainer: {
     position: "absolute",
     top: 16,
     right: 16,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    flexDirection: "column",
+    gap: 12,
+  },
+  actionButton: {
     borderRadius: 20,
     padding: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  mealPlanButton: {
+    backgroundColor: "rgba(76, 175, 80, 0.9)",
+  },
+  favoriteButton: {
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
   },
   contentContainer: {
     backgroundColor: "#FFF",

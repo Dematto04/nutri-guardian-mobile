@@ -45,7 +45,7 @@ const Article: React.FC<ArticleProps> = ({ title, description, category, onPress
               size={16}
               color={Colors.text.secondary}
             />
-            <Text style={styles.statText}>6'</Text>
+            <Text style={styles.statText}>6&apos;</Text>
           </View>
           <View style={styles.iconRow}>
             <MaterialIcons

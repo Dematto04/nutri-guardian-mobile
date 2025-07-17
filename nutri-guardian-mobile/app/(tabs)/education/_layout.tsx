@@ -19,6 +19,14 @@ function EducationLayout() {
             headerShown: false
         }}
       />
+      <Stack.Screen
+        name="allergenDetail"
+        options={{
+          title: "Thông tin Allergen",
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+        }}
+      />
     </Stack>
   )
 }

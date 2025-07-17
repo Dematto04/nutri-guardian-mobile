@@ -7,14 +7,14 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import "../global.css";
 
 export default function RootLayout() {
-  const router = useRouter();
+  // const router = useRouter();
 
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
@@ -30,9 +30,11 @@ export default function RootLayout() {
     <GluestackUIProvider config={config}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="quiz" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="payment" options={{ headerShown: false }} />
           <Stack.Screen name="detail" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>

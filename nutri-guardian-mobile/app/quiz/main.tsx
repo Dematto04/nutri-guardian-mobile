@@ -154,7 +154,7 @@ export default function AllergenQuizForm() {
     const profiles = Object.values(allergenProfiles);
     const body = {
       allergenIds: profiles.map((pro) => pro.allergenId),
-      severity: "string",
+      severity: "Có phản ứng",
       diagnosisDate: "2025-07-02",
       diagnosedBy: "string",
       lastReactionDate: "2025-07-02",

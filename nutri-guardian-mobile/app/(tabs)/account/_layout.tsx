@@ -25,6 +25,20 @@ function AccountStack() {
         options={{ title: "Add Credit Card", headerTitleAlign: "center" }}
       />
       <Stack.Screen name="profile" options={{ headerShown: false }} />
+      <Stack.Screen 
+        name="subscription" 
+        options={{ 
+          title: "Quản lý đăng ký", 
+          headerTitleAlign: "center" 
+        }} 
+      />
+      <Stack.Screen 
+        name="allergen-profile" 
+        options={{ 
+          title: "Hồ sơ dị ứng", 
+          headerTitleAlign: "center" 
+        }} 
+      />
     </Stack>
   );
 }

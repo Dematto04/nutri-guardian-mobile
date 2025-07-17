@@ -7,6 +7,15 @@ class AllergenServiceBase {
     async getAllAllergen(): Promise<AllergenResponse>{
         return api.get(`${this.urlPath}`)
     }
+
+    async getAllergenCategories() {
+        return api.get(`${this.urlPath}/categories`)
+    }
+
+    async getAllergenById(id: number) {
+        return api.get(`${this.urlPath}/${id}`)
+    }
+    
 }
 
 export const AllergenService = new AllergenServiceBase()
