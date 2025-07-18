@@ -1,5 +1,6 @@
 import ai_rec from "@/assets/images/ai_re.png";
 import { HapticTab } from "@/components/HapticTab";
+import OnboardingDebug from "@/components/OnboardingDebug";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
@@ -123,6 +124,9 @@ export default function TabLayout() {
           </Fab>
         </View>
       )}
+      
+      {/* Debug component cho development */}
+      <OnboardingDebug />
     </View>
   );
 }

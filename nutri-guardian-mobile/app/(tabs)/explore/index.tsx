@@ -12,6 +12,7 @@ import {
   FlatList,
   Image,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -398,15 +399,15 @@ function ExploreScreen() {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8fafc',
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
+    alignItems: 'center' as const,
     padding: 20,
     backgroundColor: 'white',
     borderBottomWidth: 1,
@@ -414,7 +415,7 @@ const styles = {
   },
   headerTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#1e293b',
   },
   smartButton: {
@@ -422,8 +423,8 @@ const styles = {
     width: 40,
     height: 40,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
   },
   filterContainer: {
     backgroundColor: 'white',
@@ -448,7 +449,7 @@ const styles = {
   },
   filterChipText: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '500' as const,
     color: '#64748b',
   },
   filterChipTextSelected: {
@@ -461,21 +462,21 @@ const styles = {
     paddingBottom: 16,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
     paddingHorizontal: 20,
     marginBottom: 16,
     gap: 8,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#1e293b',
   },
   recommendationsLoading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
     paddingVertical: 32,
     gap: 12,
   },
@@ -498,7 +499,7 @@ const styles = {
     height: '100%',
   },
   recommendationOverlay: {
-    position: 'absolute',
+    position: 'absolute' as const,
     bottom: 0,
     left: 0,
     right: 0,
@@ -508,16 +509,16 @@ const styles = {
   recommendationTitle: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     marginBottom: 4,
   },
   recommendationMeta: {
-    flexDirection: 'row',
+    flexDirection: 'row' as const,
     gap: 12,
   },
   metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
     gap: 4,
   },
   metaText: {
@@ -525,7 +526,7 @@ const styles = {
     fontSize: 11,
   },
   noRecommendations: {
-    alignItems: 'center',
+    alignItems: 'center' as const,
     paddingVertical: 32,
     gap: 8,
   },
@@ -539,9 +540,9 @@ const styles = {
     padding: 20,
   },
   categoriesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: 'row' as const,
+    flexWrap: 'wrap' as const,
+    justifyContent: 'space-between' as const,
     gap: 16,
   },
   categoryCard: {
@@ -549,7 +550,7 @@ const styles = {
     borderRadius: 12,
     borderWidth: 1,
     padding: 16,
-    alignItems: 'center',
+    alignItems: 'center' as const,
     minHeight: 180,
   },
   categoryImageContainer: {
@@ -557,7 +558,7 @@ const styles = {
     height: 100,
     marginBottom: 12,
     backgroundColor: 'transparent',
-    overflow: 'hidden',
+    overflow: 'hidden' as const,
   },
   categoryImage: {
     width: '100%',
@@ -566,21 +567,21 @@ const styles = {
   },
   categoryTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: '600' as const,
+    textAlign: 'center' as const,
     color: '#1e293b',
   },
   errorContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
     gap: 16,
     padding: 24,
   },
   errorText: {
     fontSize: 16,
     color: '#ef4444',
-    textAlign: 'center',
+    textAlign: 'center' as const,
   },
   retryButton: {
     backgroundColor: '#ef4444',
@@ -590,8 +591,8 @@ const styles = {
   },
   retryButtonText: {
     color: 'white',
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
-};
+});
 
 export default ExploreScreen;

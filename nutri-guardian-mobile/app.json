@@ -1,29 +1,28 @@
 {
   "expo": {
-    "name": "nutri-guardian-mobile",
+    "name": "Nutri Guardian",
     "slug": "nutri-guardian-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/IMG_4837.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "nutriguardianmobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-
     "splash": {
-      "image": "./assets/images/IMG_4837.png",
-      "resizeMode": "cover", 
-      "backgroundColor": "#ffffff" 
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff",
+      "hideExpoLoadingScreen": true
     },
-
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/IMG_4837.png"
-        
+        "foregroundImage": "./assets/images/adaptive-icon.png"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.dematto.nutriguardian"
     },
     "web": {
       "bundler": "metro",
@@ -35,6 +34,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "670b038f-2a16-4304-acc8-b6c95ff635c9"
+      }
     }
   }
 }
