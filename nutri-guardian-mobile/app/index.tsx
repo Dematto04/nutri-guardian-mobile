@@ -1,10 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import { SplashScreen, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
+  SplashScreen.preventAutoHideAsync()
+  setTimeout(SplashScreen.hideAsync, 3000)
 
   useEffect(() => {
     const checkAuthStatus = async () => {

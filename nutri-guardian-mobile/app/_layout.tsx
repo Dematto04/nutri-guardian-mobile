@@ -1,3 +1,4 @@
+import OnboardingWrapper from "@/components/OnboardingWrapper";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
@@ -29,16 +30,18 @@ export default function RootLayout() {
   return (
     <GluestackUIProvider config={config}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="quiz" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="payment" options={{ headerShown: false }} />
-          <Stack.Screen name="detail" options={{ headerShown: false }} />
-          <Stack.Screen name="chat" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+        <OnboardingWrapper>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="quiz" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="payment" options={{ headerShown: false }} />
+            <Stack.Screen name="detail" options={{ headerShown: false }} />
+            <Stack.Screen name="chat" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </OnboardingWrapper>
         <StatusBar style="auto" />
         <Toast />
       </ThemeProvider>
